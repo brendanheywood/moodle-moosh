@@ -29,11 +29,20 @@ press tab
 
 = Q/A =
 
+
+
 == Shouldn't this be part of moodle like drush is part of drupal? ==
 
 Maybe?
 
 For security it's probably best if this is separate anyway.
+
+It's also highly lighly that this set of utils could evolve quicker to catch up with Moodle
+
+
+== What about the stuff in /admin/cli/ ==
+
+Yeah but it kinda sucks. This is the start of a framework that could actually be a pleasure to use.
 
 
 == This is magic! How does it work? ==

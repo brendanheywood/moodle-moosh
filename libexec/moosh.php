@@ -1,15 +1,19 @@
 <?php
 
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
 
 
 /*
  * attempts to find, and then load a moodle config by walking up
  * up the dir tree
  */
-function load_config (){
+function find_config (){
     $path = getcwd();
+
     while ($path != '/'){
-        if ( file_exists($path.'/config.php') ){
+        $cfg = "$path/config.php";
+        if ( file_exists( $cfg ) ){
             return $path;
         } else {
             $path = dirname ( $path );
