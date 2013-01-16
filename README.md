@@ -27,6 +27,10 @@ press tab
 - resets to that password
 
 
+ moosh sql
+
+TODO This just drops into a SQL shell logged in as the moodle user.
+
 = Q/A =
 
 
