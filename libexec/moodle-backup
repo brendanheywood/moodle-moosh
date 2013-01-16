@@ -1,0 +1,6 @@
+#!/usr/bin/end bash
+set -e
+
+who
+
+

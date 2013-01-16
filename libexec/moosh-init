@@ -45,28 +45,28 @@ if [ -z "$print" ]; then
     ;;
   esac
 
-  { echo "# Load sub automatically by adding"
+  { echo "# Load moosh automatically by adding"
     echo "# the following to ${profile}:"
     echo
-    echo "eval \"\$(${_SUB_ROOT}/bin/sub init -)\""
+    echo "eval \"\$(${_MOOSH_ROOT}/bin/moosh init -)\""
     echo
   } >&2
 
   exit 1
 fi
 
-echo "export PATH=\"\${PATH}:${_SUB_ROOT}/bin\""
+echo "export PATH=\"\${PATH}:${_MOOSH_ROOT}/bin\""
 
 case "$shell" in
 bash | zsh )
-  echo "source \"$root/completions/sub.${shell}\""
+  echo "source \"$root/completions/moosh.${shell}\""
   ;;
 esac
 
-commands=(`sub commands --sh`)
+commands=(`moosh commands --sh`)
 IFS="|"
 cat <<EOS
-_sub_wrapper() {
+_moosh_wrapper() {
   local command="\$1"
   if [ "\$#" -gt 0 ]; then
     shift
@@ -74,9 +74,9 @@ _sub_wrapper() {
 
   case "\$command" in
   ${commands[*]})
-    eval \`sub "sh-\$command" "\$@"\`;;
+    eval \`moosh "sh-\$command" "\$@"\`;;
   *)
-    command sub "\$command" "\$@";;
+    command moosh "\$command" "\$@";;
   esac
 }
 EOS
@@ -86,9 +86,9 @@ EOS
 # fix both cases here by letting zsh have a function, and bash have its alias.
 case "$shell" in
 bash )
-  echo "alias sub=_sub_wrapper"
+  echo "alias moosh=_moosh_wrapper"
   ;;
 zsh )
-  echo "sub=_sub_wrapper"
+  echo "moosh=_moosh_wrapper"
   ;;
 esac

@@ -20,18 +20,18 @@ abs_dirname() {
 }
 
 libexec_path="$(abs_dirname "$0")"
-export _SUB_ROOT="$(abs_dirname "$libexec_path")"
+export _MOOSH_ROOT="$(abs_dirname "$libexec_path")"
 export PATH="${libexec_path}:$PATH"
 
 command="$1"
 case "$command" in
 "" | "-h" | "--help" )
-  exec sub-help
+  exec moosh-help
   ;;
 * )
-  command_path="$(command -v "sub-$command" || true)"
+  command_path="$(command -v "moosh-$command" || true)"
   if [ ! -x "$command_path" ]; then
-    echo "sub: no such command \`$command'" >&2
+    echo "moosh: no such command \`$command'" >&2
     exit 1
   fi
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Usage: sub commands
-# Summary: List all sub commands
-# Help: This command is mostly used for autocompletion in various shells, and for `sub help`.
+# Usage: moosh commands
+# Summary: List all moosh commands
+# Help: This command is mostly used for autocompletion in various shells, and for `moosh help`.
 # Also, this command helps find commands that are named the same as potentially builtin shell commands (which, cd, etc)
 
 set -e
 
-# Provide sub completions
+# Provide moosh completions
 if [ "$1" = "--complete" ]; then
   echo --sh
   echo --no-sh
@@ -24,8 +24,8 @@ fi
 shopt -s nullglob
 
 { for path in ${PATH//:/$'\n'}; do
-    for command in "${path}/sub-"*; do
-      command="${command##*sub-}"
+    for command in "${path}/moosh-"*; do
+      command="${command##*moosh-}"
       if [ -n "$sh" ]; then
         if [ ${command:0:3} = "sh-" ]; then
           echo ${command##sh-}
