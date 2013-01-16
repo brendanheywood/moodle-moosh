@@ -6,7 +6,7 @@ _moosh() {
     COMPREPLY=( $(compgen -W "$(moosh commands)" -- "$word") )
   else
     local command="${COMP_WORDS[1]}"
-    local completions="$(moosh completions "$command")"
+    local completions="$(moosh completions "$command" ${COMP_WORDS[@]:2})"
     COMPREPLY=( $(compgen -W "$completions" -- "$word") )
   fi
 }

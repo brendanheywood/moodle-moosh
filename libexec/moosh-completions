@@ -10,5 +10,5 @@ fi
 COMMAND_PATH="$(command -v "moosh-$COMMAND")"
 if grep -i "^# provide moosh completions" "$COMMAND_PATH" >/dev/null; then
   shift
-  exec "$COMMAND_PATH" --complete "$@"
+  exec "$COMMAND_PATH" --complete $2 "$*"
 fi
