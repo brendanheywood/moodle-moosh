@@ -1,17 +1,34 @@
 
-= Usage =
+# What is it? #
 
  moosh
 
 This missing Moodle shell.
 
 
+# To install #
 
+```
+cd ~
+git clone git@github.com:brendanheywood/moodle-moosh.git moosh
+```
 
+Add a couple lines to ~/.bashrc 
+
+```
+export PATH="$PATH:~/moosh/bin"
+eval "$(~/moosh/bin/moosh init -)"
+```
+
+# Usage #
+
+moosh
+
+It is self documenting so that's all you need. 
+
+```
  moosh backup
-
  moosh restore
-
 
  moosh reset cata
 
@@ -49,7 +66,7 @@ It's also highly lighly that this set of utils could evolve quicker to catch up 
 Yeah but it kinda sucks. This is the start of a framework that could actually be a pleasure to use.
 
 
-== This is magic! How does it work? ==
+= This is magic! How does it work? ==
 
 Use the source. It is built on the awesome 'sub' project from 27 signals.
 
