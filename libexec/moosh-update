@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Usage: moosh update
-# Summary: Pulls the latest changes from GitHub.
+# Summary: Pulls the latest updates to moosh from GitHub.
 set -e
 
 mooshgit() {
