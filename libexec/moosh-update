@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Usage: moosh update
+# Summary: Pulls the latest changes from GitHub.
+set -e
+
+git() {
+  GIT_DIR="$_MOOSH_ROOT/.git" git "$@"
+}
+
+echo "Updating 37!"
+
+git fetch
+git reset --hard origin/master
