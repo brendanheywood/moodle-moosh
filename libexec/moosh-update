@@ -3,11 +3,11 @@
 # Summary: Pulls the latest changes from GitHub.
 set -e
 
-git() {
+mooshgit() {
   GIT_DIR="$_MOOSH_ROOT/.git" git "$@"
 }
 
-echo "Updating 37!"
+echo "Updating Moosh!"
 
-git fetch
-git reset --hard origin/master
+mooshgit fetch
+mooshgit reset --hard origin/master
