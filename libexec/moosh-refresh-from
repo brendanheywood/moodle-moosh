@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+# Usage: moosh refreshfrom [host]
+# Summary: Refresh the DB and sitefiles from a remote moodle host
+
+use lib "$ENV{'_MOOSH_ROOT'}/libexec";
+
+if ($#ARGV < 0){
+    print "Usage: moosh refreshfrom [hostname]\n";
+    exit;
+}
+
+use Moosh;
+use Cwd;
+
+# detect local moodle dir
+$local = find_moodle(cwd(),1);
+
+
+#    open CONF, $conf;
+#    close CONF;
+# parse moodle config
+
+
+
+# grab install dir
+#
+# go to other box and grab config
+# parse it
+#
+# check that path matches
+#
+# go to other box and do a db dump from that other box to a potentially 3rd other DB box
+#
+# ssh that backup to here
+#
+# restore the db
+#
+# do an rsync of the site data
+#
+# do a swap out of the urls in the DB
+# do a check of the salt?
+#
+
+
