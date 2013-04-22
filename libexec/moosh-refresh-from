@@ -57,19 +57,25 @@ $remote_config = `$remote_config_cmd`;
 
 info (length($remote_config), "Fetch 'remote' config $remote_host:$remote_config_path\n");
 
-# parse local moodle config
+# parse remote moodle config
 %remote = parse_config($remote_config);
 
 # perform a remote backup and get back it's filename
-#$remote_backup_path = remote_backup(%remote);
+$remote_backup_path = remote_backup($remote_host, %remote);
 
-print $remote{dbhost};
+# copy backup to local box
+$copy_cmd = "scp $remote_host:$remote_backup_path $remote_backup_path  2>&1";
+$res = `$copy_cmd`;
 
-#
-# go to other box and do a db dump from that other box to a potentially 3rd other DB box
-#
-# ssh that backup to here
-#
+if (!-e $remote_backup_path){
+    info(0,  "Copy backup failed\n");
+    info(-1, "$copy_cmd\n");
+    info(-1, "$res\n");
+    exit;
+}
+
+info(1, "Copied backup across\n");
+
 # restore the db
 #
 # do an rsync of the site data
