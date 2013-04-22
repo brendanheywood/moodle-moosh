@@ -5,7 +5,15 @@ use Exporter;
 
 our @ISA= qw( Exporter );
 
-our @EXPORT = qw( find_moodle parse_config info remote_backup remote_cmd do_local_restore);
+our @EXPORT = qw(
+    find_moodle
+    parse_config
+    info
+    remote_backup
+    remote_cmd
+    do_local_restore
+    open_sql_shell
+);
 
 
 sub info {
@@ -164,5 +172,24 @@ sub do_local_restore {
 	}
 	info (1, "Restored local DB $file\n");
 }
+
+sub open_sql_shell {
+
+    my (%db) = @_;
+    my $command;
+    if($db{dbtype} eq 'mysql' or $db{dbtype} eq 'mysqli'){
+      $command = "mysql -u $db{dbuser} --password='$db{dbpass}' $db{dbname}";
+    } elsif ($db{dbtype} eq 'postgres7'){
+        $command = "export PGPASSWORD=\"$db{dbpass}\";\n".
+    #		"sudo -u postgres psql -h $db{host} $db{name} $db{user}";
+            "psql -h $db{dbhost} $db{dbname} $db{dbuser}";
+    }
+    if ($db{dbtype} eq 'pgsql'){
+      $command = "psql $db{dbname} $db{dbuser} ";
+    }
+#    print "$command\n";
+    system ($command) == 0  || die;
+}
+
 
 1;

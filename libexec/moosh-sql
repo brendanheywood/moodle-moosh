@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+# Usage: moosh restore [dbfile]
+# Summary: Restore from a DB file
+# Help: This abstracts away which DB you are using
+
+use lib "$ENV{'_MOOSH_ROOT'}/libexec";
+
+use Moosh;
+use Cwd;
+use File::Basename;
+
+# detect local moodle dir
+$local = find_moodle(cwd(),'local', 1);
+
+$local_root = dirname($local);
+
+open CONF, $local;
+@conf = <CONF>;
+close CONF;
+
+# parse local moodle config
+%local = parse_config(join "\n", @conf);
+
+open_sql_shell(%local);
+

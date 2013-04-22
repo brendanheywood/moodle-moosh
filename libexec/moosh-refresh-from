@@ -77,7 +77,8 @@ if (!-e $remote_backup_path){
 info(1, "Copied backup across\n");
 
 # restore the db
-#
+do_local_restore($remote_backup_path, %local);
+
 # do an rsync of the site data
 #
 # do a swap out of the urls in the DB
