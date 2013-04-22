@@ -12,8 +12,10 @@ Usage: moosh restore [dbfile]
 EOF
     exit;
 }
-# Provide moosh completions
-if ($ARGV[1] == '--complete'){
+# Prov-ide moo-sh comple-tions
+if ($ARGV[1] eq '--complete'){
+#    print "test $ARGV[1]";
+    print `ls $ARGV[1]`;
     exit 0;
 }
 

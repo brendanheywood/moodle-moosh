@@ -5,7 +5,7 @@ use Exporter;
 
 our @ISA= qw( Exporter );
 
-our @EXPORT = qw( find_moodle parse_config info remote_backup remote_cmd);
+our @EXPORT = qw( find_moodle parse_config info remote_backup remote_cmd do_local_restore);
 
 
 sub info {
@@ -124,7 +124,45 @@ sub get_backup_cmd {
 
 }
 
+sub get_restore_cmd {
 
+    my ($restore, %db) = @_;
 
+    my $command;
+
+	if($db{dbtype} eq 'mysql' or $db{dbtype} eq 'mysqli'){
+		$command = "mysql -u $db{dbuser} --password='$db{dbpass}' $db{dbname} < $restore";
+	} elsif($db{dbtype} eq 'postgres7' || $db{dbtype} eq 'pgsql'){
+	 	$command = "export PGPASSWORD=\"$db{dbpass}\";\n".
+			"sudo -u postgres psql -h $db{dbhost} -U postgres -c \"select pg_terminate_backend(procpid) from pg_stat_activity where datname='$db{dbname}'\";\n".
+			"sudo -u postgres psql -h $db{dbhost} -U postgres -c 'drop database \"$db{dbname}\"';\n".
+			"sudo -u postgres createdb -h $db{dbhost} -O $db{dbuser} -E UTF8 $db{dbname};\n".
+			#"pg_restore -O -x -n public -U $db{user} -d $db{name} $restore;";
+			#"pg_restore -n public -h $db{host} -U $db{user} -d $db{name} $restore;";
+			"pg_restore  -h $db{dbhost} -U $db{dbuser} -d $db{dbname} $restore;";
+	} else {
+		info (0, "Don't know how to restore type: $db{dbtype}\n");
+		exit;
+	}
+
+    return $command;
+
+}
+
+sub do_local_restore {
+
+    my ($file, %cfg) = @_;
+
+    my $command = get_restore_cmd($file, %cfg);
+
+	foreach my $cmd (split "\n", $command){
+#		print "Command: $cmd\n";
+		my $ret = system ($cmd);
+        if ($ret != 0){
+            info(0, "Failed to restore DB\n");
+        }
+	}
+	info (1, "Restored local DB $file\n");
+}
 
 1;
