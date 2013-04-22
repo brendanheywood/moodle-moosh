@@ -5,7 +5,7 @@ use Exporter;
 
 our @ISA= qw( Exporter );
 
-our @EXPORT = qw( find_moodle parse_config );
+our @EXPORT = qw( find_moodle parse_config info );
 
 
 sub info {
@@ -23,17 +23,17 @@ sub info {
 # returns a path 
 sub find_moodle {
     use File::Basename;
-    my ($dir, $force) = @_;
+    my ($dir, $name, $force) = @_;
     while ($dir ne '/'){
         my $cfg = "$dir/config.php";
         if (-e $cfg){
-            info (1, "Found cfg = $cfg\n");
+            info (1, "Found '$name' config = $cfg\n");
             return $cfg;
         }
         $dir = dirname($dir); 
     }
     if ($force){
-        info (0, "Can't find a moodle install\n");
+        info (0, "Can't find '$name' moodle install\n");
         exit;
     }
 
@@ -46,22 +46,22 @@ sub find_moodle {
 sub parse_config {
 
     my ($config) = @_;
-
-    my @lines = split /\n/, $config;
-
+    my $c = 0;
     my %db = ();
-
     my $key;
     my $val;
+    my @lines = split /\n/, $config;
 
     foreach my $line (@lines){
-        if($line =~ /(^\$CFG->db(.*?)\s.*= '(.*?)')/){
+        if($line =~ /(^\$CFG->(.*?)\s.*= '(.*?)')/){
             $key = $2;
             $val = $3;
             $db{$key} = $val;
-            print "Line: Key '$key' Val '$val'--- \n";
+            $c++;
+#            print "Line: Key '$key' Val '$val'--- \n";
         }
     }
+    info ($c, "Parsed $c config items\n");
     return %db;
 }
 

@@ -1,33 +1,70 @@
 #!/usr/bin/perl
-# Usage: moosh refreshfrom [host]
+# Usage: moosh refresh-from [host]
 # Summary: Refresh the DB and sitefiles from a remote moodle host
+# Help: This reads you local config, then tries to read a config on the remote
+# host, then does a bunch of remote ssh commands and brings all the data over
 
 use lib "$ENV{'_MOOSH_ROOT'}/libexec";
 
 if ($#ARGV < 0){
-    print "Usage: moosh refreshfrom [hostname]\n";
+    print <<EOF;
+Usage: moosh refresh-from [hostname]
+
+hostname can be an ssh host alias for convenience eg: moosh refresh-from oua-dev
+EOF
     exit;
 }
 
 use Moosh;
 use Cwd;
+use File::Basename;
 
 # detect local moodle dir
-$local = find_moodle(cwd(),1);
+$local = find_moodle(cwd(),'local', 1);
+
+$local_root = dirname($local);
 
 
-#    open CONF, $conf;
-#    close CONF;
-# parse moodle config
+open CONF, $local;
+@conf = <CONF>;
+close CONF;
+
+# parse local moodle config
+%local = parse_config(join "\n", @conf);
+
+#print $local{dbhost};
+
+# Ok now try and find the remote config file
+# If the param is just a host then tack on the local moodle root 
+
+$remote_root = $ARGV[0];
+
+# if remote doesnt't contain a path then assume it's the same as local
+if ($remote_root =~ /^(.*):(.*)$/){
+    $remote_host = $1;
+    $remote_root = $2;
+} else {
+    $remote_host = $ARGV[0];
+    $remote_root = $local_root;
+    
+}
 
 
+# Grab remote config file
+$remote_config_path = $remote_root.'/config.php';
+$remote_config_cmd = "ssh $remote_host cat $remote_config_path";
+$remote_config = `$remote_config_cmd`;
 
-# grab install dir
-#
-# go to other box and grab config
-# parse it
-#
-# check that path matches
+info (length($remote_config), "Fetch 'remote' config $remote_host:$remote_config_path\n");
+
+# parse local moodle config
+%remote = parse_config($remote_config);
+
+# perform a remote backup and get back it's filename
+#$remote_backup_path = remote_backup(%remote);
+
+print $remote{dbhost};
+
 #
 # go to other box and do a db dump from that other box to a potentially 3rd other DB box
 #
